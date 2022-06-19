@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:theme_flutter/theme/theme.dart';
 import 'package:theme_flutter/theme/theme_bloc/theme_bloc.dart';
+import 'package:theme_flutter/theme/theme_mode.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -23,10 +24,11 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = context.select((ThemeBloc themeBloc) => themeBloc.state);
+    final themeModeData =
+        context.select((ThemeBloc themeBloc) => themeBloc.state);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: themeData ? ThemeMode.dark : ThemeMode.light,
+      themeMode: themeModeData.themeModeState,
       theme: AppTheme.appThemeData[AppThemeStatus.light],
       darkTheme: AppTheme.appThemeData[AppThemeStatus.dark],
       home: const PresentationPage(),
@@ -41,60 +43,65 @@ class PresentationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, bool>(
+    return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(
-            systemNavigationBarColor: state ? Colors.black : Colors.white,
+            systemNavigationBarColor:
+                Theme.of(context).bottomNavigationBarTheme.backgroundColor,
           ),
           child: Scaffold(
             appBar: AppBar(
               title: const Text('T H E M E S'),
               centerTitle: true,
               systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
                 statusBarIconBrightness:
-                    state ? Brightness.light : Brightness.dark,
+                    state.isDark ? Brightness.light : Brightness.dark,
+                statusBarColor: Colors.transparent,
               ),
             ),
-            body: Center(
-              child: Column(
-                children: [
-                  SwitchListTile.adaptive(
-                    value: state,
-                    title: const Text('Modo Oscuro'),
-                    onChanged: (changedTheme) {
-                      context
-                          .read<ThemeBloc>()
-                          .add(ThemeChangedEvent(themeStatus: changedTheme));
+            body: ListView.builder(
+              padding: const EdgeInsets.all(10),
+              itemCount: ThemeModeStatus.values.length,
+              itemBuilder: (context, index) {
+                final itemThemeModeStatus = ThemeModeStatus.values[index];
+                return Card(
+                  child: ListTile(
+                    title: Text('$itemThemeModeStatus'),
+                    onTap: () {
+                      context.read<ThemeBloc>().add(
+                          ThemeChangedEvent(themeModeApp: itemThemeModeStatus));
                     },
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Mostra diálogo'),
-                  )
+                );
+              },
+            ),
+            bottomNavigationBar: NavigationBarTheme(
+              data: NavigationBarThemeData(
+                backgroundColor:
+                    Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+                height: 90,
+              ),
+              child: NavigationBar(
+                destinations: const [
+                  NavigationDestination(
+                    icon: Icon(Icons.alarm_add),
+                    label: 'Alarma',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.alarm_add),
+                    label: 'Reloj',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.alarm_add),
+                    label: 'Hora',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.alarm_add),
+                    label: 'Cronometro',
+                  ),
                 ],
               ),
-            ),
-            bottomNavigationBar: NavigationBar(
-              destinations: const [
-                NavigationDestination(
-                  icon: Icon(Icons.alarm_add),
-                  label: 'Alarma',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.alarm_add),
-                  label: 'Reloj',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.alarm_add),
-                  label: 'Hora',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.alarm_add),
-                  label: 'Cronometro',
-                ),
-              ],
             ),
           ),
         );

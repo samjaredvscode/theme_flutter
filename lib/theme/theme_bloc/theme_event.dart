@@ -9,11 +9,11 @@ abstract class ThemeEvent extends Equatable {
 
 class ThemeChangedEvent extends ThemeEvent {
   const ThemeChangedEvent({
-    required this.themeStatus,
+    required this.themeModeApp,
   });
 
-  final bool themeStatus;
+  final ThemeModeStatus themeModeApp;
 
   @override
-  List<Object> get props => [themeStatus];
+  List<Object> get props => [themeModeApp];
 }

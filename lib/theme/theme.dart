@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
-enum AppThemeStatus {
-  dark,
-  light,
-}
+enum AppThemeStatus { dark, light }
 
 class AppTheme {
   static final appThemeData = {
     AppThemeStatus.light: ThemeData(
       scaffoldBackgroundColor: Colors.white,
-      colorSchemeSeed: Colors.red,
+      colorScheme: const ColorScheme.light(),
       useMaterial3: true,
-      brightness: Brightness.light,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.blue[200],
+      ),
     ),
     AppThemeStatus.dark: ThemeData(
       scaffoldBackgroundColor: Colors.black,
-      colorSchemeSeed: Colors.red[600],
-      brightness: Brightness.dark,
+      colorScheme: const ColorScheme.dark(),
       useMaterial3: true,
-    )
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.blue[600],
+        selectedIconTheme: const IconThemeData(color: Colors.red),
+      ),
+    ),
   };
 }
