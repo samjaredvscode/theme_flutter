@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,20 +47,15 @@ class PresentationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
+        log('${state.themeModeState}');
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(
-            systemNavigationBarColor:
-                Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            systemNavigationBarColor: Theme.of(context).colorScheme.surface,
           ),
           child: Scaffold(
             appBar: AppBar(
               title: const Text('T H E M E S'),
               centerTitle: true,
-              systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarIconBrightness:
-                    state.isDark ? Brightness.light : Brightness.dark,
-                statusBarColor: Colors.transparent,
-              ),
             ),
             body: ListView.builder(
               padding: const EdgeInsets.all(10),
