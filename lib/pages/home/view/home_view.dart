@@ -67,6 +67,7 @@ class HomeView extends StatelessWidget {
             floatingActionButton: FloatingActionButton.extended(
               onPressed: () {},
               isExtended: true,
+              tooltip: 'Añadir',
               label: const Text('Añadir'),
               icon: const Icon(Icons.add),
             ),
