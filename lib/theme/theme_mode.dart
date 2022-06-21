@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ThemeModeStatus {
-  dark,
-  light,
-  system,
-}
+enum ThemeModeStatus { dark, light, system }
 
 class ThemeModeApp {
   static final themeModeApp = {
